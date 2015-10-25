@@ -14,21 +14,22 @@
     // use only 'a' through 'z' and lower case
     #define CHAR_TO_INDEX(c) ((int)c - (int)'a')
     // trie node
+    std::vector<string> v;
     typedef struct trie_node trie_node_t;
     struct trie_node
     {
-    int value;
-    trie_node_t *children[ALPHABET_SIZE];
-    list <int>fid;
+        int value;
+        trie_node_t *children[ALPHABET_SIZE];
+        list <int>fid;
     };
     // trie ADT
     typedef struct trie trie_t;
     struct trie
     {
-    trie_node_t *root;
-    int count;
+        trie_node_t *root;
+        int count;
 
-    //int occ[4];
+        //int occ[4];
     };
      trie_t trie;
     // Returns new trie node (initialized to NULLs)
@@ -42,14 +43,14 @@
 
         if( pNode )
         {
-        int i;
+            int i;
 
-        pNode->value = 0;
+            pNode->value = 0;
 
-        for(i = 0; i < ALPHABET_SIZE; i++)
-        {
-        pNode->children[i] = NULL;
-        }
+            for(i = 0; i < ALPHABET_SIZE; i++)
+            {
+                pNode->children[i] = NULL;
+            }
         }
 
         return pNode;
@@ -57,8 +58,8 @@
     // Initializes trie (root is dummy node)
     void initialize(trie_t *pTrie)
     {
-    pTrie->root = getNode();
-    pTrie->count = 0;
+        pTrie->root = getNode();
+        pTrie->count = 0;
     }
 
     // If not present, inserts key into trie
@@ -86,7 +87,7 @@
             trav = trav->children[index];
         }
 
-         cout<<"\n value "<<trav->value;
+        cout<<"\n value "<<trav->value;
         // mark last node as leaf
         trav->value = pTrie->count;
         trav->fid.push_back(fileid);
@@ -122,7 +123,7 @@
             cout<<"files: ";
             while(!k.empty())
             {
-                cout<<k.front()<<" ";
+                cout<<v[k.front()-1].c_str()<<" ";
                 k.pop_front();
             }
             return 1;
@@ -138,7 +139,7 @@
         ifstream infile;
         string filepath;
         //infile.open("ff.txt");
-        std::vector<string> v;
+
 
 
         //char output[][32] = {"Not present in trie", "Present in trie"};
@@ -184,55 +185,38 @@
                 infile>>word;
                 if(infile.eof())
                     break;
-                //j=hash(word,51);
+
                 cout<<"\n word is "<<word;
                 insert(&trie,word,k+1);
-                /*
 
-                if(ht[j].count[k]==-1)
-                {
-                    ht[j].id[k]=k+1;
-                    ht[j].count[k]++;
-                    strcpy(ht[j].alpha,word);
-                }
-                else
-                {
-                    if(strcmp(word,ht[j].alpha)==0)
-                    ht[j].count[k]++;
-                    else
-                    cout<<"collision"<<endl;
-
-                }
-                */
             }
             infile.close();
         }
     }
 
-void search_for()
-{
-    char w[20];
-    char choice[30];
-    do
+    void search_for()
     {
-    cout<<"\n enter search query"<<endl;
-    cin>>w;
-    //int i;
-    //int j=hash(w,51);
-    if(search(&trie,w))
-     cout<<"\n found";
-    else
-    cout<<"element not found"<<endl;
-    cout<<"\n\n type bye to exit or any other string to continue";
-    cin>>choice;
-    }while(strcmp(choice,"bye"));
+        char w[20];
+        char choice[30];
+        do
+        {
+            cout<<"\n enter search query"<<endl;
+            cin>>w;
+            if(search(&trie,w))
+                cout<<"\n found";
+            else
+                cout<<"element not found"<<endl;
+            cout<<"\n\n type bye to exit or any other string to continue";
+            cin>>choice;
 
-}
+        }while(strcmp(choice,"bye"));
+
+    }
 };
 int main()
-   {
-        search_word a;
-        a.index();
-        a.search_for();
-        return 0;
-    }
+{
+    search_word a;
+    a.index();
+    a.search_for();
+    return 0;
+}
