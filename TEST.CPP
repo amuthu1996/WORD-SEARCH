@@ -6,6 +6,7 @@
     #include <fstream>
     #include <dirent.h>
     #include <vector>
+    #include <bits/stdc++.h>
     using namespace std;
     #define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
     #define ALPHABET_SIZE (26)
@@ -35,7 +36,7 @@
     trie_node_t *getNode(void)
     {
         trie_node_t *pNode = NULL;
-        pNode = (trie_node_t *)malloc(sizeof(trie_node_t));
+        pNode = new trie_node_t;
 
         if( pNode )
         {
@@ -119,6 +120,7 @@
         //char word[30];
         int i,j,k;
         ifstream infile;
+        string filepath;
         //infile.open("ff.txt");
         std::vector<string> v;
 
@@ -130,53 +132,42 @@
         // Construct trie
 
         DIR *dpdf;
-    struct dirent *epdf;
+        struct dirent *epdf;
 
-    dpdf = opendir("./toindex");
-    if (dpdf != NULL){
-       while (epdf = readdir(dpdf)){
-
-        if(!strcmp(epdf->d_name,".") || !strcmp(epdf->d_name,"..")  )
+        dpdf = opendir("./toindex");
+        if (dpdf != NULL)
         {
-            //cout<<"\n skipping . and  .. in ubuntu listing";
-            continue;
-        }
-          v.push_back(epdf->d_name);
+            while (epdf = readdir(dpdf))
+            {
 
-          cout<<"\n Indexed Filename "<<v.size()<<":"<<epdf->d_name;
-          // std::out << epdf->d_name << std::endl;
-       }
-}
-/*
-    for(i=0;i<51;i++)
-    {
-        for(j=0;j<3;j++)
-        {
-        ht[i].count[j]=-1;
-        ht[i].id[j]=-1;
-        }
-        ht[i].alpha[0]='\0';
-    }
+                if(!strcmp(epdf->d_name,".") || !strcmp(epdf->d_name,"..")  )
+                {
+                    //cout<<"\n skipping . and  .. in ubuntu listing";
+                    continue;
+                }
+                  v.push_back(epdf->d_name);
 
-    */
-    for(k=0;k<3;k++)
+                  cout<<"\n Indexed Filename "<<v.size()<<":"<<epdf->d_name;
+                  // std::out << epdf->d_name << std::endl;
+            }
+        }
+
+    for(k=0;k<v.size();k++)
     {
-        //infile.open(v[k].c_str());
+        filepath = "./toindex/" + v[k];
+        infile.open(filepath.c_str());
         //infile.open(v[k]);
-        if(k==0)
-        infile.open("ff.txt");
-         if(k==1)
-        infile.open("hh.txt");
-         if(k==2)
-        infile.open("gg.txt");
 
-    cout<<"\n now indexing ... "<<k;
+
+    cout<<"\n now indexing ... "<<k+1;
         //infile.open();
     char word[30];
     int count = 0;
     while(!infile.eof())
     {
         infile>>word;
+        if(infile.eof())
+            break;
         //j=hash(word,51);
         cout<<"\n word is "<<word;
         insert(&trie,word,k);
