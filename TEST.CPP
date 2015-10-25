@@ -19,6 +19,7 @@
     {
     int value;
     trie_node_t *children[ALPHABET_SIZE];
+    list <int>fid;
     };
     // trie ADT
     typedef struct trie trie_t;
@@ -26,6 +27,7 @@
     {
     trie_node_t *root;
     int count;
+
     //int occ[4];
     };
      trie_t trie;
@@ -75,44 +77,58 @@
 
         for( level = 0; level < length; level++ )
         {
-        index = CHAR_TO_INDEX(key[level]);
-        if( !trav->children[index] )
-        {
-        trav->children[index] = getNode();
+            index = CHAR_TO_INDEX(key[level]);
+            if( !trav->children[index] )
+            {
+                trav->children[index] = getNode();
+            }
+
+            trav = trav->children[index];
         }
 
-        trav = trav->children[index];
-        }
          cout<<"\n value "<<trav->value;
         // mark last node as leaf
         trav->value = pTrie->count;
+        trav->fid.push_back(fileid);
 
     }
     // Returns non zero, if key presents in trie
     int search(trie_t *pTrie, char key[])
     {
-    int level;
-    int length = strlen(key);
-    int index;
-    trie_node_t *trav;
+        int level;
+        int length = strlen(key);
+        int index;
+        trie_node_t *trav;
 
-    trav = pTrie->root;
+        trav = pTrie->root;
 
-    for( level = 0; level < length; level++ )
-    {
-    index = CHAR_TO_INDEX(key[level]);
+        for( level = 0; level < length; level++ )
+        {
+            index = CHAR_TO_INDEX(key[level]);
 
-    if( !trav->children[index] )
-    {
-        return 0;
-    }
+            if( !trav->children[index] )
+            {
+                return 0;
+            }
 
-    trav = trav->children[index];
-    }
+            trav = trav->children[index];
+        }
 
-    //return (0 != trav && trav->value);
-    if(trav->value) return 1;
-    else return 0;
+        //return (0 != trav && trav->value);
+        if(trav->value)
+        {
+
+            list <int>k=trav->fid;
+            cout<<"files: ";
+            while(!k.empty())
+            {
+                cout<<k.front()<<" ";
+                k.pop_front();
+            }
+            return 1;
+        }
+        else
+            return 0;
     }
     void index()
     {
@@ -152,46 +168,46 @@
             }
         }
 
-    for(k=0;k<v.size();k++)
-    {
-        filepath = "./toindex/" + v[k];
-        infile.open(filepath.c_str());
-        //infile.open(v[k]);
-
-
-    cout<<"\n now indexing ... "<<k+1;
-        //infile.open();
-    char word[30];
-    int count = 0;
-    while(!infile.eof())
-    {
-        infile>>word;
-        if(infile.eof())
-            break;
-        //j=hash(word,51);
-        cout<<"\n word is "<<word;
-        insert(&trie,word,k);
-/*
-
-        if(ht[j].count[k]==-1)
+        for(k=0;k<v.size();k++)
         {
-            ht[j].id[k]=k+1;
-            ht[j].count[k]++;
-            strcpy(ht[j].alpha,word);
-        }
-        else
-        {
-            if(strcmp(word,ht[j].alpha)==0)
-            ht[j].count[k]++;
-            else
-            cout<<"collision"<<endl;
+            filepath = "./toindex/" + v[k];
+            infile.open(filepath.c_str());
+            //infile.open(v[k]);
 
+
+            cout<<"\n now indexing ... "<<k+1;
+                //infile.open();
+            char word[30];
+            int count = 0;
+            while(!infile.eof())
+            {
+                infile>>word;
+                if(infile.eof())
+                    break;
+                //j=hash(word,51);
+                cout<<"\n word is "<<word;
+                insert(&trie,word,k+1);
+                /*
+
+                if(ht[j].count[k]==-1)
+                {
+                    ht[j].id[k]=k+1;
+                    ht[j].count[k]++;
+                    strcpy(ht[j].alpha,word);
+                }
+                else
+                {
+                    if(strcmp(word,ht[j].alpha)==0)
+                    ht[j].count[k]++;
+                    else
+                    cout<<"collision"<<endl;
+
+                }
+                */
+            }
+            infile.close();
         }
-        */
     }
-    infile.close();
-    }
-}
 
 void search_for()
 {
